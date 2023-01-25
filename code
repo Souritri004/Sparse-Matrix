@@ -1,0 +1,119 @@
+#include<stdio.h> 
+#include<stdlib.h>
+#include<stdbool.h>
+
+
+int **scanMatrix()//takes the array as input from the user dynamically
+{   
+    int **matrix = (int**)malloc(3 *  sizeof(int));
+	int i,j;
+    printf("Enter the 9 elements seperated by space\n");
+
+    for (i = 0; i < 3; i++)
+    {
+       matrix[i] = (int*)malloc(3 *  sizeof(int));
+        for( j=0 ; j<3 ; j++)
+        {
+	       scanf("%d" , &matrix[i][j]);
+        }//close inner loop
+   }//close outer loop
+   return matrix;
+}//method close
+void **printMatrix(int **ptrMatrix)//prints the matrix
+{
+    int i, j;//loop variables
+
+    printf("\n The Elements of the matrix are :- \n\n");
+
+    for (i = 0; i < 3; i++)
+    {
+        for (j = 0; j < 3; j++)
+        {
+            printf(" %d", ptrMatrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
+bool checkMatrix(int **ptrMatrix)//checks whether the matrix is a sparse matrix or not
+{
+	int count=0;int i,j;
+    for( i=0 ; i<3 ; i++)
+    {
+	   for( j=0 ; j<3 ; j++)
+       {
+          if(ptrMatrix[i][j]!=0)//count is increamented by 1 if there is a non-zero element
+          count++;
+       }   
+    }
+
+    if(count<=4)
+    return true;
+    else
+    return false; 
+}
+
+
+void **sparseRepresentation(int **ptrMatrix)//represent the non zero elemts as first column,row as second column and column no. as third column
+{
+   	int count=0;int i,j;
+    int element[9];
+    int row[9];
+    int column[9];
+   
+    for(i=0 ; i<3 ; i++)
+    {
+	   for( j=0 ; j<3 ; j++)
+       {
+          if(ptrMatrix[i][j]!=0)
+          {
+	        element[count] = ptrMatrix[i][j];
+            row[count] = i;
+            column[count] = j; 
+            count++;//
+          }
+       }   
+    }
+
+    int Result[count][3];
+
+	for( i=0 ; i<count ; i++)
+    {
+        Result[i][0] = element[i]; 
+        Result[i][1] = row[i];  
+        Result[i][2] = column[i]; 
+    }
+
+    printf("\n\n The Non-Zero elements of the matrix with co-ordinates are :- \n\n"); 
+  
+    for( i=0 ; i<count ; i++)
+    {
+	   for( j=0 ; j<3 ; j++)
+       {
+	      printf("%d " , Result[i][j]);//prints the resultant matrix as the specified format
+       }
+       printf("\n");
+    }
+}//end of sprseRepresentation
+
+
+int main()//driver program;calls the respective methods and executes the main program
+{
+	int **ptrMatrix;
+
+    ptrMatrix = scanMatrix();//calling the method scanMatrix();
+
+    printMatrix(ptrMatrix);//calling the method printMatrix to print the elements
+
+    if(checkMatrix(ptrMatrix) == 1)//checks whether the given matrix is a sparse matrix or not by calling the method checkMatrix
+    {
+       printf("\n\nThe matrix is a Sparse Matrix");
+	   sparseRepresentation(ptrMatrix);//if sparse matrix then print the matrix in the specified way
+	}
+    else if(checkMatrix(ptrMatrix) == 0)
+    printf("\n\nThe matrix is not a Sparse Matrix");
+return 0;
+
+}//end of main
+ 
